@@ -3,44 +3,31 @@ const fs = require("node:fs");
 
 const server = http.createServer((req, res) => {
   console.log("Requested URL:", req.url);
+  res.writeHead(200, { "Content-type": "text/html" });
 
-  if (req.url === "/") {
-    fs.readFile("./index.html", "utf8", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      res.writeHead(200, { "Content-type": "text/html" });
-      res.end(data);
-    });
-  } else if (req.url === "/about") {
-    fs.readFile("./about.html", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      res.writeHead(200, { "Content-type": "text/html" });
-      res.end(data);
-    });
-  } else if (req.url === "/contact") {
-    fs.readFile("./contact-me.html", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      res.writeHead(200, { "Content-type": "text/html" });
-      res.end(data);
-    });
-  } else {
-    fs.readFile("./404.html", (err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      res.writeHead(200, { "Content-type": "text/html" });
-      res.end(data);
-    });
+  let path = "./";
+  switch (req.url) {
+    case "/":
+      path += "index.html";
+      break;
+    case "/about":
+      path += "about.html";
+      break;
+    case "/contact":
+      path += "contact-me.html";
+      break;
+    default:
+      path += "404.html";
+      break;
   }
+
+  fs.readFile(path, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.end();
+    }
+    res.end(data);
+  });
 });
 
 server.listen(8080);

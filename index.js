@@ -1,18 +1,15 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const aboutRouter = require("./routers/aboutRouter")
+const contactRouter = require("./routers/contactRouter")
+const indexRouter = require("./routers/indexRouter")
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
-});
+app.use("/", indexRouter);
 
-app.get("/contact", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/contact-me.html"));
-});
+app.use("/contact", contactRouter);
 
-app.get("/about", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/about.html"));
-});
+app.use("/about", aboutRouter );
 
 
 app.use((req, res) => {
